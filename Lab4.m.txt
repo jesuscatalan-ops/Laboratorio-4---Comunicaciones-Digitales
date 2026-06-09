@@ -1,0 +1,28 @@
+clear; clc; close all;
+EbN0_dB = 1:11;
+EbN0    = 10.^(EbN0_dB/10);
+
+log10_BPSK = [-2.809, -3.132, -3.529, -4.020, -4.627, -5.382, -6.320, -7.455, -8.679, -7.0, -7.0];
+log10_QPSK = [-3.725, -4.334, -5.089, -6.027, -7.191, -8.546, -7.0, -7.0, -7.0, -7.0, -7.0];
+log10_8PSK = [-1.278, -1.356, -1.444, -1.544, -1.661, -1.799, -1.965, -2.166, -2.411, -2.712, -3.082];
+
+BER_sim_BPSK = 10.^log10_BPSK;
+BER_sim_QPSK = 10.^log10_QPSK;
+BER_sim_8PSK = 10.^log10_8PSK;
+BER_teo_BPSK = qfunc(sqrt(2 * EbN0));
+BER_teo_QPSK = qfunc(sqrt(2 * EbN0));
+BER_teo_8PSK = (2/3) * qfunc(sqrt(6 * EbN0) * sin(pi/8));
+
+figure;
+semilogy(EbN0_dB, BER_sim_BPSK, 'b-o', 'LineWidth', 1.5, 'MarkerSize', 7, 'DisplayName', 'BPSK simulado'); hold on;
+semilogy(EbN0_dB, BER_teo_BPSK, 'b--',  'LineWidth', 1.5, 'DisplayName', 'BPSK teórico');
+semilogy(EbN0_dB, BER_sim_QPSK, 'g-s', 'LineWidth', 1.5, 'MarkerSize', 7, 'DisplayName', 'QPSK simulado');
+semilogy(EbN0_dB, BER_teo_QPSK, 'g--',  'LineWidth', 1.5, 'DisplayName', 'QPSK teórico');
+semilogy(EbN0_dB, BER_sim_8PSK, 'r-^', 'LineWidth', 1.5, 'MarkerSize', 7, 'DisplayName', '8-PSK simulado');
+semilogy(EbN0_dB, BER_teo_8PSK, 'r--',  'LineWidth', 1.5, 'DisplayName', '8-PSK teórico');
+grid on;
+xlabel('E_b/N_0 (dB)', 'FontSize', 12);
+ylabel('BER', 'FontSize', 12);
+title('BER vs E_b/N_0 — BPSK, QPSK y 8-PSK', 'FontSize', 13);
+legend('Location', 'southwest', 'FontSize', 10);
+xlim([1 11]); ylim([1e-9 1]);
